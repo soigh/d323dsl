@@ -1,8 +1,7 @@
-folder('test')
 def git_info = ("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute()
 def branches = git_info.text.readLines().collect { it.split()[1].replaceAll('refs/heads/', '')}.unique()
 
-job('test/MNTLAB-mznak-main-build-job'){
+job('MNTLAB-mznak-main-build-job'){
    scm {
         github('MNT-Lab/d323dsl', '$BRANCH_NAME')
     }
@@ -71,7 +70,7 @@ job('test/MNTLAB-mznak-main-build-job'){
 }
 
 for(i in 1..4){
-  job('test/MNTLAB-mznak-child'+i+'-build-job'){
+  job('MNTLAB-mznak-child'+i+'-build-job'){
      scm {
       git {
         remote {

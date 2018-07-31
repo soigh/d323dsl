@@ -15,13 +15,15 @@ job('MNTLAB-stsitou-main-build-job'){
             filterable(false)
             choiceType('CHECKBOX')
             groovyScript {
-                script('jobslist = []\n' +
-                        'def jobs = Jenkins.instance.getAllItems(AbstractItem.class)\n' +
-                        'for(int i=0; i<jobs.size(); i++){\n' +
-                        '    jobslist[i] = jobs.get(i).fullName\n' +
-                        '}\n' +
-                        'return jobslist')
-                sandbox(true)
+                script {
+                    script('jobslist = []\n' +
+                            'def jobs = Jenkins.instance.getAllItems(AbstractItem.class)\n' +
+                            'for(int i=0; i<jobs.size(); i++){\n' +
+                            '    jobslist[i] = jobs.get(i).fullName\n' +
+                            '}\n' +
+                            'return jobslist')
+                    sandbox(true)
+                }
             }
         }
         choiceParam('BRANCH_NAME', branches, 'Choose a branch')

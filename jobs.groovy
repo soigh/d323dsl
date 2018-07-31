@@ -56,7 +56,7 @@ job('MNTLAB-aandryieuski-main-build-job'){
             }
             publishers {
                 archiveArtifacts {
-                    pattern("output.txt, $BRANCH_NAME_dsl_script.tar.gz")
+                    pattern("output.txt, ${BRANCH_NAME}_dsl_script.tar.gz")
 
                 }
             }

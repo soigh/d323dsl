@@ -14,14 +14,15 @@ job('MNTLAB-omonko-main-build-job') {
             }
         }
     }
-    scm {
-       
-    }
-    steps {
-      	
-        
-    }
     publishers {
+        downstreamParameterized {
+            trigger('$BUILD_TRIGGER') {
+                condition('UNSTABLE_OR_BETTER')
+                parameters {
+                    currentBuild()
+                }
+            }
+        }
     }
 }
 for (i in 1..4) {
@@ -40,5 +41,15 @@ for (i in 1..4) {
             	type('BRANCH')
             }
     	}
+        steps {
+            shell("""chmod +x script.sh
+                ./script.sh > output.txt""")
+        }
+     	publishers {
+			archiveArtifacts {
+				pattern("output.txt")
+            }
+        }
+     
     }  
 }

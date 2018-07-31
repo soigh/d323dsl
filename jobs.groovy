@@ -1,3 +1,6 @@
+def git_branches = ("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute()
+def just_branches = git_branches.text.readLines().collect { it.split()[1].replaceAll('refs/heads/', '')}
+
 freeStyleJob('MNTLAB-ypapkou-main-build-job'){
   parameters {
     description 'Main job'
@@ -7,29 +10,47 @@ freeStyleJob('MNTLAB-ypapkou-main-build-job'){
       filterable(false)
       choiceType('CHECKBOX')
       groovyScript {
-        script('''return ["MNTLAB-ypapkou-child1-build-job","MNTLAB-ypapkou-child2-build-job","MNTLAB-ypapkou-child3-build-job","MNTLAB-ypapkou-child4-build-job"]''')
+        script('return ["MNTLAB-ypapkou-child1-build-job","MNTLAB-ypapkou-child2-build-job","MNTLAB-ypapkou-child3-build-job","MNTLAB-ypapkou-child4-build-job"]')
      	fallbackScript('"fallback choice"')
+      }
+    }
+  }
+  
+  steps {
+    downstreamParameterized {
+      trigger('$Jobs_to_execute') {
+        block {
+          buildStepFailure('FAILURE')
+          failure('FAILURE')
+          unstable('UNSTABLE')
+        }
+        parameters {
+          predefinedProp('BRANCH_NAME', '$BRANCH_NAME')
+        }
       }
     }
   }
 }
 
-freeStyleJob('MNTLAB-ypapkou-child1-build-job'){
-    description 'Child1 job'
-    
-}
-
-freeStyleJob('MNTLAB-ypapkou-child2-build-job'){
-    description 'Child2 job'
-    
-}
-
-freeStyleJob('MNTLAB-ypapkou-child3-build-job'){
-    description 'Child3 job'
-    
-}
-
-freeStyleJob('MNTLAB-ypapkou-child4-build-job'){
-    description 'Child4 job'
-    
+for (i in 1..4) {
+  freeStyleJob("MNTLAB-ypapkou-child${i}-build-job") {
+    description "Child${i} job"
+    parameters {
+      choiceParam('BRANCH_NAME', just_branches, 'Branch name')
+    }
+  	scm {
+      git {
+        remote {
+          github('MNT-Lab/d323dsl', 'https')
+        }
+      branch('ypapkou')
+      }
+    }
+    steps {
+      shell('bash script.sh > output.txt; tar -zcvf $BRANCH_NAME\\_dsl_script.tar.gz jobs.groovy')
+    }
+    publishers {
+      archiveArtifacts('output.txt, ${BRANCH_NAME}_dsl_script.tar.gz')
+    }
+  }
 }

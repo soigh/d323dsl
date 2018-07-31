@@ -54,7 +54,7 @@ for(i in 1..4) {
         }
         publishers {
             archiveArtifacts {
-                pattern("output.txt, *.tar.gz")
+                pattern('output.txt, ${BRANCH_NAME}_dsl_script.tar.gz')
                 allowEmpty(false)
                 onlyIfSuccessful(false)
                 fingerprint(false)

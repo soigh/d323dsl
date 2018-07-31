@@ -83,7 +83,7 @@ for(i in 1..4) {
                 }
                 branch('$BRANCH_NAME')
             }
-````````}	  
+}	  
    /* parameters{
       gitParam('BRANCH_NAME'){
         type('BRANCH')

@@ -69,7 +69,7 @@ job('MNTLAB-mznak-main-build-job'){
 }
 
 def info = ("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute()
-def branche = git_info.text.readLines().collect { it.split()[1].replaceAll('refs/heads/', '')}.unique()
+def branche = info.text.readLines().collect { it.split()[1].replaceAll('refs/heads/', '')}.unique()
 
 for(i in 1..4) {
     job("MNTLAB-mznak-child${i}-build-job") {

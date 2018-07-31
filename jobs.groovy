@@ -71,7 +71,6 @@ job('MNTLAB-mznak-main-build-job'){
 
 for(i in 1..4){
   job('MNTLAB-mznak-child'+i+'-build-job'){
-    
     parameters{
       gitParam('BRANCH_NAME'){
         type('BRANCH')

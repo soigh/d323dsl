@@ -11,7 +11,7 @@ for(int i=0; i<jobs.size(); i++){
 job('MNTLAB-stsitou-main-build-job'){
     description('main')
     parameters {
-        choiceParam('JOBS', jobs, 'Choose a job')
+        choiceParam('JOBS', jobslist, 'Choose a job')
         choiceParam('BRANCH_NAME', branches, 'Choose a branch')
     }
     disabled(false)

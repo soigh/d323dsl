@@ -1,5 +1,4 @@
-folder('test_folder')
-job('test_folder/MNTLAB-mznak-main-build-job'){
+job('Mikhail Znak/MNTLAB-mznak-main-build-job'){
    scm {
         github('MNT-Lab/d323dsl', '$BRANCH_NAME')
     }
@@ -59,7 +58,7 @@ job('test_folder/MNTLAB-mznak-main-build-job'){
 
 
 for(i in 1..4){
-  job('test_folder/MNTLAB-mznak-child'+i+'-build-job'){
+  job('Mikhail Znak/MNTLAB-mznak-child'+i+'-build-job'){
     
     parameters{
       gitParam('BRANCH_NAME'){
@@ -67,10 +66,14 @@ for(i in 1..4){
       }
     }
 	steps {
-        shell('/bin/bash $WORKSPACE/script.sh > $WORKSPACE/output.txt')
+        shell('''/bin/bash $WORKSPACE/script.sh > $WORKSPACE/output.txt;
+				 tar -czvf "$BRANCH_NAME"_dsl_script.tar.gz -C $WORKSPACE dsl.groovy''')
     }     
     scm {
         github('MNT-Lab/d323dsl', '$BRANCH_NAME')
     } 
+    publishers {
+      archiveArtifacts('output.txt, ${BRANCH_NAME}_dsl_script.tar.gz')
+    }
   }
 }

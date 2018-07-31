@@ -68,15 +68,13 @@ job('MNTLAB-mznak-main-build-job'){
 }
 }
 
-//def info = ("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute()
-//def branche = info.text.readLines().collect { it.split()[1].replaceAll('refs/heads/', '')}.unique()
-def git_info = ("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute()
-def branches = git_info.text.readLines().collect { it.split()[1].replaceAll('refs/heads/', '')}.unique()
+def info = ("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute()
+def branche = info.text.readLines().collect { it.split()[1].replaceAll('refs/heads/', '')}.unique()
 
 for(i in 1..4) {
     job("MNTLAB-mznak-child${i}-build-job") {
         parameters {
-            choiceParam('BRANCH_NAME', branches, 'Git branch choice')
+            choiceParam('BRANCH_NAME', branche, 'Git branch choice')
         }
 	    scm {
         github('MNT-Lab/d323dsl', '$BRANCH_NAME')

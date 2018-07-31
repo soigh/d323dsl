@@ -19,6 +19,21 @@ job("MNTLAB-hviniarski-main-build-job") {
             branch('$BRANCH_NAME')
         }
     }
+    steps {
+        downstreamParameterized {
+            trigger('$BUILD_TRIGGER') {
+                block {
+                    buildStepFailure('FAILURE')
+                    failure('FAILURE')
+                    unstable('UNSTABLE')
+                }
+                parameters {
+                    predefinedProp('BRANCH_NAME', '$BRANCH_NAME')
+                }
+            }
+            }
+        }
+    }
     disabled(false)
     concurrentBuild(false)
 }
@@ -26,4 +41,4 @@ for(i in 1..4) {
     job("MNTLAB-hviniarski-child${i}-build-job") {
 
     }
-}}
+}

@@ -24,11 +24,21 @@ job('test/MNTLAB-mznak-main-build-job'){
                 multiSelectDelimiter ','
                 projectName "MNTLAB-mznak-main-build-job"
             }
+	   'com.cwctravel.hudson.plugins.extended__choice__parameter.ExtendedChoiceParameterDefinition' {
+                name 'BRANCH_NAME'
+                quoteValue 'false'
+                saveJSONParameterToFile 'false'
+                visibleItemCount '1'
+                type 'PT_SINGLE_SELECT'
+                value "mznak, master"
+                multiSelectDelimiter ','
+                projectName "MNTLAB-mznak-main-build-job"
+           }
         }
      }
   }
   
-  parameters{
+ /* parameters{
       gitParameterDefinition{
         name('BRANCH_NAME')
         type('BRANCH')
@@ -43,7 +53,7 @@ job('test/MNTLAB-mznak-main-build-job'){
         quickFilterEnabled(false)
         listSize('1')
       }
-  }
+  }*/
   steps {
         downstreamParameterized {
             trigger('$JOBS') {

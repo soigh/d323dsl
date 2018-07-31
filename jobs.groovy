@@ -73,7 +73,6 @@ def branche = info.text.readLines().collect { it.split()[1].replaceAll('refs/hea
 
 for(i in 1..4){
   job('MNTLAB-mznak-child'+i+'-build-job'){
-	
 	parameters {
             choiceParam('BRANCH_NAME', branche, 'Select Branch')
         }

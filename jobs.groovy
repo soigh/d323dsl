@@ -1,4 +1,4 @@
-job('EPBYMINW2033/MNTLAB-omonko-main-build-job') {
+job('MNTLAB-omonko-main-build-job') {
     description 'Main job'
     parameters {
     	choiceParam('BRANCH_NAME', ['omonko (default)', 'master'], 'Branch name')
@@ -18,15 +18,27 @@ job('EPBYMINW2033/MNTLAB-omonko-main-build-job') {
        
     }
     steps {
-      	dsl {
-          job('EPBYMINW2033/MNTLAB-omonko-child1-build-job') {}
-          job('EPBYMINW2033/MNTLAB-omonko-child2-build-job') {}
-          job('EPBYMINW2033/MNTLAB-omonko-child3-build-job') {}
-          job('EPBYMINW2033/MNTLAB-omonko-child4-build-job') {}
-          	
-        }
+      	
         
     }
     publishers {
     }
+}
+
+for (i in 1..4) {
+   job("MNTLAB-omonko-child${i}-build-job") {
+     	scm {
+           git {
+           		remote {
+                	url('https://github.com/MNT-Lab/d323dsl.git')
+            	}
+           }
+       
+    	}
+   		parameters {
+        	gitParam('BRANCH_NAME') {
+            	type('BRANCH')
+            }
+    	}
+    }  
 }

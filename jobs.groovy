@@ -1,10 +1,9 @@
 job("MNTLAB-mpiatliou-main-build-job") {
-    description()
-    keepDependencies(false)
     parameters {
         choiceParam('BRANCH_NAME', ['master', 'mpiatliou'], 'Branch choice')
         activeChoiceParam('BUILD_TRIGGER') {
             choiceType('CHECKBOX')
+            description('Available options')
             groovyScript {
                 script('''return ["MNTLAB-mpiatliou-child1-build-job","MNTLAB-mpiatliou-child2-build-job","MNTLAB-mpiatliou-child3-build-job","MNTLAB-mpiatliou-child4-build-job"]''')
                 fallbackScript('"fallback choice"')
@@ -13,15 +12,24 @@ job("MNTLAB-mpiatliou-main-build-job") {
         scm {
             git {
                 remote {
-                    github("MNT-Lab/d323dsl", "https")
+                    url('https://github.com/MNT-Lab/d323dsl.git')
                 }
                 branch('$BRANCH_NAME')
             }
         }
     }
-    for(i in 1..4) {
-        job("MNTLAB-mpiatliou-child${i}-build-job") {
-
+}
+    steps {
+        downstreamParameterized {
+            trigger('$BUILD_TRIGGER') {
+                block {
+                    buildStepFailure("FAILURE")
+                    unstable("UNSTABLE")
+                    failure("FAILURE")
+                }
+                parameters {
+                    predefinedProp('BRANCH_NAME', '$BRANCH_NAME')
+                }
+            }
         }
     }
-}

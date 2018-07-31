@@ -1,7 +1,8 @@
-job('MNTLAB-mznak-main-build-job'){
-   /*scm {
+folder('test')
+job('test/MNTLAB-mznak-main-build-job'){
+   scm {
         github('MNT-Lab/d323dsl', '$BRANCH_NAME')
-    }*/
+    }
   
   configure {
     project->
@@ -14,28 +15,17 @@ job('MNTLAB-mznak-main-build-job'){
                 visibleItemCount '5'
                 type 'PT_CHECKBOX'
                 value '''MNTLAB-mznak-child1-build-job,
-                         MNTLAB-mznak-child2-build-job,
-                         MNTLAB-mznak-child3-build-job,
-                         MNTLAB-mznak-child4-build-job'''
+                        MNTLAB-mznak-child2-build-job,
+                        MNTLAB-mznak-child3-build-job,
+                        MNTLAB-mznak-child4-build-job'''
                 multiSelectDelimiter ','
                 projectName "MNTLAB-mznak-main-build-job"
             }
-        
-	   'com.cwctravel.hudson.plugins.extended__choice__parameter.ExtendedChoiceParameterDefinition' {
-                name 'BRANCH_NAME'
-                quoteValue 'false'
-                saveJSONParameterToFile 'false'
-                visibleItemCount '1'
-                type 'PT_SINGLE_SELECT'
-                value '''mznak,master'''
-                multiSelectDelimiter ','
-                projectName "MNTLAB-mznak-main-build-job"
-            }
-        
+        }
      }
   }
   
-  /*parameters{
+  parameters{
       gitParameterDefinition{
         name('BRANCH_NAME')
         type('BRANCH')
@@ -50,7 +40,7 @@ job('MNTLAB-mznak-main-build-job'){
         quickFilterEnabled(false)
         listSize('1')
       }
-  }*/
+  }
   steps {
         downstreamParameterized {
             trigger('$JOBS') {
@@ -66,34 +56,24 @@ job('MNTLAB-mznak-main-build-job'){
     }
   }
 }
-}
 
-def info = ("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute()
-def branche = info.text.readLines().collect { it.split()[1].replaceAll('refs/heads/', '')}.unique()
-
-for(i in 1..4) {
-    job("MNTLAB-mznak-child${i}-build-job") {
-        parameters {
-            choiceParam('BRANCH_NAME', branche, 'Git branch choice')
-        }
-	    scm {
-        github('MNT-Lab/d323dsl', '$BRANCH_NAME')
-    } 
-	    
-   /* parameters{
+for(i in 1..4){
+  job('test/MNTLAB-mznak-child'+i+'-build-job'){
+    parameters{
       gitParam('BRANCH_NAME'){
         type('BRANCH')
       }
-    }*/
-	steps {
+    }
+    steps {
         shell('''/bin/bash $WORKSPACE/script.sh > $WORKSPACE/output.txt;
-				 tar -czvf "$BRANCH_NAME"_dsl_script.tar.gz -C $WORKSPACE jobs.groovy''')
+				 name=$( echo $BRANCH_NAME | cut -d'/' -f2)
+				 tar -czvf "$name"_dsl_script.tar.gz -C $WORKSPACE jobs.groovy''')
     }     
-    /*scm {
+    scm {
         github('MNT-Lab/d323dsl', '$BRANCH_NAME')
-    } */
+    }
     publishers {
-      archiveArtifacts('output.txt, ${BRANCH_NAME}_dsl_script.tar.gz')
+      archiveArtifacts('output.txt, *_dsl_script.tar.gz')
     }
   }
 }

@@ -43,7 +43,7 @@ for (i in 1..4) {
         remote {
           github('MNT-Lab/d323dsl', 'https')
         }
-      branch('ypapkou')
+        branch('${BRANCH_NAME}')
       }
     }
     steps {

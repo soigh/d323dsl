@@ -17,7 +17,7 @@ job('MNTLAB-stsitou-main-build-job'){
                         '    if (jobs.get(i).fullName.contains("stsitou")) {\n' +
                         '        jobslist.add(jobs.get(i).fullName)\n' +
                         '}\n' +
-                        '}' +
+                        '}\n' +
                         'return jobslist')
             }
         }

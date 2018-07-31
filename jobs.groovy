@@ -6,7 +6,7 @@ job('dzhukova/MNTLAB-dzhukova-main-build-job') {
                 github("MNT-Lab/d323dsl", "https")
                 
             }
-          branch('$branch')
+          branch('$BRANCH_NAME')
         }
   }
   
@@ -18,34 +18,28 @@ configure {
                 name 'jobs'
                 quoteValue 'false'
                 saveJSONParameterToFile 'false'
-                visibleItemCount '15'
+                visibleItemCount '5'
                 type 'PT_MULTI_SELECT'
                 value 'MNTLAB-dzhukova-child1-build-job, MNTLAB-dzhukova-child2-build-job, MNTLAB-dzhukova-child3-build-job, MNTLAB-dzhukova-child4-build-job'
                 multiSelectDelimiter ','
                 projectName "MNTLAB-dzhukova-main-build-job"
             }
         
+        'com.cwctravel.hudson.plugins.extended__choice__parameter.ExtendedChoiceParameterDefinition' {
+                name 'BRANCH_NAME'
+                quoteValue 'false'
+                saveJSONParameterToFile 'false'
+                visibleItemCount '2'
+                type 'PT_SINGLE_SELECT'
+                value "dzhukova, master"
+                multiSelectDelimiter ','
+                projectName "MNTLAB-dzhukova-main-build-job"
+}
         }
         }
 }
           
-     parameters {
-
-      gitParameterDefinition {
-        name("branch")
-        type("PT_BRANCH")
-        defaultValue("origin/dzhukova")
-        description("choose branch")
-        branch('')
-        branchFilter("origin/dzhukova|origin/master")
-        tagFilter('*')
-        sortMode('NONE')
-        selectedValue('NONE')
-        useRepository('https://github.com/MNT-Lab/d323dsl.git')
-        quickFilterEnabled(false)
-    }
-}
-
+    
  steps {
        shell('echo "Hello"')
    downstreamParameterized {
@@ -56,8 +50,8 @@ configure {
                     unstable('UNSTABLE')
                 }
                 parameters {
-                    currentBuild()
-                }
+                    predefinedProp('BRANCH_NAME', '$BRANCH_NAME')
+}
             }
             
         }
@@ -65,27 +59,38 @@ configure {
    
     }
 }
-job('dzhukova/MNTLAB-dzhukova-child1-build-job') {
-    
-    steps {
-       shell('echo "Hello1"')
-    }
+def git_info = ("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute()
+def branches = git_info.text.readLines().collect { it.split()[1].replaceAll('refs/heads/', '')}.unique()
+for(i in 1..4) {
+  job("dzhukova/MNTLAB-dzhukova-child${i}-build-job") {
+  parameters {
+            choiceParam('BRANCH_NAME', branches, 'Git branch choice')
 }
-job('dzhukova/MNTLAB-dzhukova-child2-build-job') {
-    
+  scm {
+        git {
+            remote {
+                github("MNT-Lab/d323dsl", "https")
+                
+            }
+          branch('$BRANCH_NAME')
+        }
+  }
+  
+  
     steps {
-       shell('echo "Hello2"')
+      shell('echo "Hello${i}"')
+      shell('bash script.sh > output.txt')
+      shell('tar cvf "$BRANCH_NAME"_dsl_script.tar.gz jobs.groovy')
+      
     }
+    publishers {
+            archiveArtifacts {
+              pattern('output.txt, ${BRANCH_NAME}_dsl_script.tar.gz')
+                allowEmpty(false)
+                onlyIfSuccessful(false)
+                fingerprint(false)
+                defaultExcludes(true)
+            }
 }
-job('dzhukova/MNTLAB-dzhukova-child3-build-job') {
-    
-    steps {
-       shell('echo "Hello3"')
-    }
 }
-job('dzhukova/MNTLAB-dzhukova-child4-build-job') {
-    
-    steps {
-       shell('echo "Hello4"')
-    }
 }

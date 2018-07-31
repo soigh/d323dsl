@@ -10,14 +10,6 @@ job("MNTLAB-hviniarski-main-build-job") {
                 fallbackScript('"fallback choice"')
             }
     }
-    scm {
-        git {
-            remote {
-                github("MNT-Lab/d323dsl", "https")
-            }
-            branch('$BRANCH_NAME')
-        }
-    }
     steps {
         downstreamParameterized {
             trigger('$BUILD_TRIGGER') {

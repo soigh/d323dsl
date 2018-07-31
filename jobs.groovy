@@ -21,10 +21,10 @@ job("MNTLAB-ymaniukevich-main-build-job") {
                 visibleItemCount '5'
                 type 'PT_CHECKBOX'
                 groovyScript """return [
-										'MNTLAB-ymaniukevich-child1-build-job',
+					'MNTLAB-ymaniukevich-child1-build-job',
                                         'MNTLAB-ymaniukevich-child2-build-job',
                                         'MNTLAB-ymaniukevich-child3-build-job',
-										'MNTLAB-ymaniukevich-child4-build-job'
+					'MNTLAB-ymaniukevich-child4-build-job'
                                         ]"""
                 multiSelectDelimiter ','
                 projectName "MNTLAB-ymaniukevich-main-build-job"

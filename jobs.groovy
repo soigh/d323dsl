@@ -33,6 +33,9 @@ def branches = git_info.text.readLines().collect { it.split()[1].replaceAll('ref
 
 for(i in 1..4) {
     job("MNTLAB-hviniarski-child${i}-build-job") {
+        wrappers {
+            preBuildCleanup()
+        }
         parameters {
             choiceParam('BRANCH_NAME', branches, 'Branch choice')
         }
@@ -56,6 +59,7 @@ for(i in 1..4) {
                 fingerprint(false)
                 defaultExcludes(true)
             }
+
         }
     }
 }

@@ -2,7 +2,8 @@ import jenkins.model.*
 import hudson.model.*
 def repo_data = ("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute()
 def branches = repo_data.text.readLines().collect { it.split()[1].replaceAll('refs/heads/', '')}
-//def all_jobs = Jenkins.instance.getAllItems(AbstractItem.class)
+def all_jobs = Jenkins.instance.getAllItems(AbstractItem.class)
+print all_jobs
 job('MNTLAB-stsitou-main-build-job'){
     description('main')
     parameters {

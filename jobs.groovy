@@ -1,4 +1,7 @@
 folder('test')
+def git_info = ("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute()
+def branches = git_info.text.readLines().collect { it.split()[1].replaceAll('refs/heads/', '')}.unique()
+
 job('test/MNTLAB-mznak-main-build-job'){
    scm {
         github('MNT-Lab/d323dsl', '$BRANCH_NAME')
@@ -59,19 +62,25 @@ job('test/MNTLAB-mznak-main-build-job'){
 
 for(i in 1..4){
   job('test/MNTLAB-mznak-child'+i+'-build-job'){
-    parameters{
-      gitParam('BRANCH_NAME'){
-        type('BRANCH')
+     scm {
+      git {
+        remote {
+          url('https://github.com/MNT-Lab/d323dsl.git')
+        }
+        branch('$BRANCH_NAME')
       }
+    }
+    parameters {
+      choiceParam('BRANCH_NAME', branches, '')
     }
     steps {
         shell('''/bin/bash $WORKSPACE/script.sh > $WORKSPACE/output.txt;
 				 name=$( echo $BRANCH_NAME | cut -d'/' -f2)
 				 tar -czvf "$name"_dsl_script.tar.gz -C $WORKSPACE jobs.groovy''')
     }     
-    scm {
+   /* scm {
         github('MNT-Lab/d323dsl', '$BRANCH_NAME')
-    }
+    }*/
     publishers {
       archiveArtifacts('output.txt, *_dsl_script.tar.gz')
     }

@@ -28,16 +28,17 @@ job("MNTLAB-hviniarski-main-build-job") {
     disabled(false)
     concurrentBuild(false)
 }
-def git_info = ("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute()
-def branches = git_info.text.readLines().collect { it.split()[1].replaceAll('refs/heads/', '')}.unique()
-
 for(i in 1..4) {
     job("MNTLAB-hviniarski-child${i}-build-job") {
+
         wrappers {
             preBuildCleanup()
         }
         parameters {
-            choiceParam('BRANCH_NAME', branches, 'Branch choice')
+            gitParam('BRANCH_NAME') {
+                description('Get branch info')
+                type('BRANCH')
+            }
         }
         scm {
             git {
@@ -49,7 +50,7 @@ for(i in 1..4) {
         }
         steps {
             shell('bash script.sh > output.txt')
-            shell('tar cvf $BRANCH_NAME\\_dsl_script.tar.gz jobs.groovy')
+            shell('BRANCH_NAME="$(cut -d\'/\' -f2 <<<"$BRANCH_NAME")"; tar cvf $BRANCH_NAME\\_dsl_script.tar.gz jobs.groovy')
         }
         publishers {
             archiveArtifacts {

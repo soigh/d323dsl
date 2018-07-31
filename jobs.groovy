@@ -68,20 +68,35 @@ job('MNTLAB-mznak-main-build-job'){
 }
 }
 
+def info = ("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute()
+def branche = info.text.readLines().collect { it.split()[1].replaceAll('refs/heads/', '')}.unique()
+
 for(i in 1..4){
   job('MNTLAB-mznak-child'+i+'-build-job'){
-    parameters{
+	
+	parameters {
+            choiceParam('BRANCH_NAME', branche, 'Select Branch')
+        }
+        scm {
+            git {
+                remote {
+                    github("MNT-Lab/d323dsl", "https")
+                }
+                branch('$BRANCH_NAME')
+            }
+	}	  
+   /* parameters{
       gitParam('BRANCH_NAME'){
         type('BRANCH')
       }
-    }
+    }*/
 	steps {
         shell('''/bin/bash $WORKSPACE/script.sh > $WORKSPACE/output.txt;
 				 tar -czvf "$BRANCH_NAME"_dsl_script.tar.gz -C $WORKSPACE jobs.groovy''')
     }     
-    scm {
+    /*scm {
         github('MNT-Lab/d323dsl', '$BRANCH_NAME')
-    } 
+    } */
     publishers {
       archiveArtifacts('output.txt, ${BRANCH_NAME}_dsl_script.tar.gz')
     }

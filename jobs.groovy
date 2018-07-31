@@ -18,8 +18,7 @@ for (i in 1..4) {
       shell('''
 chmod +x script.sh
 ./script.sh > output.txt
-			''')
-      shell('tar -czf ${BRANCH_NAME}_dsl_script.tar.gz jobs.groovy')
+tar -czf ${BRANCH_NAME}_dsl_script.tar.gz jobs.groovy''')
     }
     publishers {
 		archiveArtifacts {

@@ -3,14 +3,14 @@ job('MNTLAB-aandryieuski-main-build-job'){
     parameters {
         activeChoiceParam('JOBS') {
             description('Choose JOBS')
-            filterable()
+            filterable(false)
             choiceType('CHECKBOX')
             groovyScript {
-                script('["MNTLAB-aandryieuski-child1-build-job", "MNTLAB-aandryieuski-child2-build-job", "MNTLAB-aandryieuski-child3-build-job", "MNTLAB-aandryieuski-child4-build-job"]')
-                fallbackScript('"fallback choice"')
+                script('return ["MNTLAB-aandryieuski-child1-build-job", "MNTLAB-aandryieuski-child2-build-job", "MNTLAB-aandryieuski-child3-build-job", "MNTLAB-aandryieuski-child4-build-job"]')
+
             }
         }
-        choiceParam('BRANCH_NAME', ['aandryieuski', 'master'], 'Choose branch')
+        choiceParam('BRANCH_NAME', ['*/aandryieuski', '*/master'], 'Choose branch')
     }
     disabled(false)
     concurrentBuild(false)
@@ -35,11 +35,11 @@ job('MNTLAB-aandryieuski-main-build-job'){
             parameters {
                 activeChoiceParam('BRANCH_NAME') {
                     description('Choose branch')
-                    filterable()
+                    filterable(false)
                     choiceType('SINGLE_SELECT')
                     groovyScript {
                         script('("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute().text.readLines().collect { it.split()[1].replaceAll(\'refs/heads/\', \'\')}.unique()')
-                        fallbackScript('"fallback choice"')
+
                     }
                 }
             }
@@ -56,7 +56,7 @@ job('MNTLAB-aandryieuski-main-build-job'){
             }
             publishers {
                 archiveArtifacts {
-                    pattern("output.txt, ${BRANCH_NAME}_dsl_script.tar.gz")
+                    pattern('output.txt, ${BRANCH_NAME}_dsl_script.tar.gz')
 
                 }
             }

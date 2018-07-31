@@ -14,12 +14,16 @@ job('MNTLAB-omonko-main-build-job') {
             }
         }
     }
-    publishers {
+    steps {
         downstreamParameterized {
             trigger('$BUILD_TRIGGER') {
-                condition('UNSTABLE_OR_BETTER')
+				block {
+					buildStepFailure("FAILURE")
+					unstable("UNSTABLE")
+					failure("FAILURE")
+				}
                 parameters {
-                    currentBuild()
+                    predefinedProp('BRANCH_NAME', '$BRANCH_NAME')
                 }
             }
         }
@@ -32,8 +36,7 @@ for (i in 1..4) {
            		remote {
                 	url('https://github.com/MNT-Lab/d323dsl.git')
             	}
-             	
-           }
+            }
        
     	}
    		parameters {
@@ -42,12 +45,13 @@ for (i in 1..4) {
             }
     	}
         steps {
-            shell("""chmod +x script.sh
-                ./script.sh > output.txt""")
+            shell('''chmod +x script.sh
+                ./script.sh > output.txt
+tar -czvf ${BRANCH_NAME}_dsl_script.tar.gz jobs.groovy''')
         }
      	publishers {
 			archiveArtifacts {
-				pattern("output.txt")
+              pattern('${BRANCH_NAME}_dsl_script.tar.gz')
             }
         }
      

@@ -21,9 +21,10 @@ job("MNTLAB-ymaniukevich-main-build-job") {
                 visibleItemCount '5'
                 type 'PT_CHECKBOX'
                 groovyScript """return [
-					'MNTLAB-ymaniukevich-child1-build-job',
+										'MNTLAB-ymaniukevich-child1-build-job',
                                         'MNTLAB-ymaniukevich-child2-build-job',
-                                        'MNTLAB-ymaniukevich-child3-build-job'
+                                        'MNTLAB-ymaniukevich-child3-build-job',
+										'MNTLAB-ymaniukevich-child4-build-job'
                                         ]"""
                 multiSelectDelimiter ','
                 projectName "MNTLAB-ymaniukevich-main-build-job"
@@ -37,38 +38,48 @@ job("MNTLAB-ymaniukevich-main-build-job") {
         downstreamParameterized {
             trigger('$BUILDS_TRIGGER') {
                 block {
-                    buildStepFailure('never')
-                    failure('never')
-                    unstable('never')
+                    buildStepFailure('FAILURE')
+                    failure('FAILURE')
+                    unstable('UNSTABLE')
                 }
                 parameters {
-                    predefinedProp('GIT_BRANCH', '$BRANCH_NAME')
+                    predefinedProp('BRANCH_NAME', '$BRANCH_NAME')
                              }
-		}
-	}
+}
+}
     }
+disabled(false)
+concurrentBuild(false)
 }
 
+def git_info = ("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute()
+def branches = git_info.text.readLines().collect { it.split()[1].replaceAll('refs/heads/', '')}.unique()
 
-for (i in 1..2){
-job("MNTLAB-ymaniukevich-child${i}-build-job") {
-	description()
-	keepDependencies(false)
- parameters {
-        gitParam('sha') {
-            description('Revision commit SHA')
-            type('BRANCH')
-            branch('master')
+for(i in 1..4) {
+    job("MNTLAB-ymaniukevich-child${i}-build-job") {
+        parameters {
+            choiceParam('BRANCH_NAME', branches, 'Git branch choice')
         }
- }
-  scm {
-	git {
-		remote {
-			github("MNT-Lab/d323dsl", "https")
-			credentials("b28c8c1e-2ad8-4aa0-b1f5-6caff2756ea9")
-			}
-		branch("*/master")
-		}
-	}
-}
+        scm {
+            git {
+                remote {
+                    github("MNT-Lab/d323dsl", "https")
+                }
+                branch('$BRANCH_NAME')
+            }
+        }
+        steps {
+            shell('bash script.sh > output.txt')
+            shell('tar cvf "$BRANCH_NAME"_dsl_script.tar.gz jobs.groovy')
+        }
+        publishers {
+            archiveArtifacts {
+              pattern('output.txt, ${BRANCH_NAME}_dsl_script.tar.gz')
+                allowEmpty(false)
+                onlyIfSuccessful(false)
+                fingerprint(false)
+                defaultExcludes(true)
+            }
+        }
+    }
 }

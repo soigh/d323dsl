@@ -20,7 +20,7 @@ job('MNTLAB-mznak-main-build-job'){
                 multiSelectDelimiter ','
                 projectName "MNTLAB-mznak-main-build-job"
             }
-        }
+        
 	   'com.cwctravel.hudson.plugins.extended__choice__parameter.ExtendedChoiceParameterDefinition' {
                 name 'BRANCH_NAME'
                 quoteValue 'false'
@@ -66,7 +66,7 @@ job('MNTLAB-mznak-main-build-job'){
     }
   }
 }
-
+}
 
 for(i in 1..4){
   job('MNTLAB-mznak-child'+i+'-build-job'){

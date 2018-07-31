@@ -62,12 +62,12 @@ job("MNTLAB-ymaniukevich-child${i}-build-job") {
         }
  }
   scm {
-		git {
-			remote {
-				github("MNT-Lab/d323dsl", "https")
-				credentials("b28c8c1e-2ad8-4aa0-b1f5-6caff2756ea9")
+	git {
+		remote {
+			github("MNT-Lab/d323dsl", "https")
+			credentials("b28c8c1e-2ad8-4aa0-b1f5-6caff2756ea9")
 			}
-			branch("*/master")
+		branch("*/master")
 		}
 	}
 }

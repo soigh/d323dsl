@@ -1,7 +1,7 @@
 job('MNTLAB-omonko-main-build-job') {
     description 'Main job'
     parameters {
-    	choiceParam('BRANCH_NAME', ['omonko (default)', 'master'], 'Branch name')
+    	choiceParam('BRANCH_NAME', ['omonko', 'master'], 'Branch name')
         activeChoiceParam('BUILD_TRIGGER') {
             choiceType('CHECKBOX')
             groovyScript {
@@ -24,7 +24,6 @@ job('MNTLAB-omonko-main-build-job') {
     publishers {
     }
 }
-
 for (i in 1..4) {
    job("MNTLAB-omonko-child${i}-build-job") {
      	scm {
@@ -32,6 +31,7 @@ for (i in 1..4) {
            		remote {
                 	url('https://github.com/MNT-Lab/d323dsl.git')
             	}
+             	
            }
        
     	}

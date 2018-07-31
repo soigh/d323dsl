@@ -15,9 +15,9 @@ job('MNTLAB-stsitou-main-build-job'){
     parameters {
         activeChoiceParam('JOBS') {
             description('Select jobs to be executed with parameters')
-            choiceType('MULTI_SELECT')
+            choiceType('CHECKBOX')
             groovyScript {
-                script('[1,2,3]')
+                script('return ["1","2","3"]')
                 fallbackScript('"fallback choice"')
             }
         }

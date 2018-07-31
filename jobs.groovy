@@ -14,9 +14,9 @@ job('Mikhail Znak/MNTLAB-mznak-main-build-job'){
                 visibleItemCount '5'
                 type 'PT_CHECKBOX'
                 value '''MNTLAB-mznak-child1-build-job,
-                        MNTLAB-mznak-child2-build-job,
-                        MNTLAB-mznak-child3-build-job,
-                        MNTLAB-mznak-child4-build-job'''
+                         MNTLAB-mznak-child2-build-job,
+                         MNTLAB-mznak-child3-build-job,
+                         MNTLAB-mznak-child4-build-job'''
                 multiSelectDelimiter ','
                 projectName "MNTLAB-mznak-main-build-job"
             }
@@ -67,7 +67,7 @@ for(i in 1..4){
     }
 	steps {
         shell('''/bin/bash $WORKSPACE/script.sh > $WORKSPACE/output.txt;
-				 tar -czvf "$BRANCH_NAME"_dsl_script.tar.gz -C $WORKSPACE dsl.groovy''')
+				 tar -czvf "$BRANCH_NAME"_dsl_script.tar.gz -C $WORKSPACE jobs.groovy''')
     }     
     scm {
         github('MNT-Lab/d323dsl', '$BRANCH_NAME')

@@ -6,15 +6,22 @@ jobslist = []
 def jobs = Jenkins.instance.getAllItems(AbstractItem.class)
 for(int i=0; i<jobs.size(); i++) {
     if (jobs.get(i).fullName.contains("stsitou")) {
-    jobslist[i] = jobs.get(i).fullName
+        jobslist.add(jobs.get(i).fullName)
 }
 }
 
 job('MNTLAB-stsitou-main-build-job'){
     description('main')
     parameters {
+        activeChoiceParam('JOBS') {
+            description('Select jobs to be executed with parameters')
+            choiceType('MULTI_SELECT')
+            groovyScript {
+                script('[1,2,3]')
+                fallbackScript('"fallback choice"')
+            }
+        }
         choiceParam('BRANCH_NAME', branches, 'Choose a branch')
-
     }
     disabled(false)
     concurrentBuild(false)

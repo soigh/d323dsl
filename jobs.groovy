@@ -7,6 +7,25 @@ def jobs = Jenkins.instance.getAllItems(AbstractItem.class)
 for(int i=0; i<jobs.size(); i++){
     jobslist[i] = jobs.get(i).fullName
 }
+
+configure { project ->
+    def scriptContainers = project / 'properties' / 'hudson.model.ParametersDefinitionProperty' / 'parameterDefinitions'
+    scriptContainers.each { org_level ->
+        def script_level = org_level / 'script'
+        script_level.appendNode('secureScript', [plugin: 'script-security@1.34']).with {
+            appendNode('sandbox', 'true')
+            appendNode('script', script_level.script.text())
+            script_level.remove(script_level / 'script')
+        }
+        script_level.appendNode('secureFallbackScript', [plugin: 'script-security@1.34']).with {
+            appendNode('sandbox', 'true')
+            appendNode('script',script_level.fallbackScript.text())
+            script_level.remove(script_level / 'fallbackScript')
+        }
+
+    }
+}
+
 job('MNTLAB-stsitou-main-build-job'){
     description('main')
     parameters {
@@ -15,15 +34,12 @@ job('MNTLAB-stsitou-main-build-job'){
             filterable(false)
             choiceType('CHECKBOX')
             groovyScript {
-                script {
                     script('jobslist = []\n' +
                             'def jobs = Jenkins.instance.getAllItems(AbstractItem.class)\n' +
                             'for(int i=0; i<jobs.size(); i++){\n' +
                             '    jobslist[i] = jobs.get(i).fullName\n' +
                             '}\n' +
                             'return jobslist')
-                    sandbox(true)
-                }
             }
         }
         choiceParam('BRANCH_NAME', branches, 'Choose a branch')

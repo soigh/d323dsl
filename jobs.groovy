@@ -4,15 +4,17 @@ def repo_data = ("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute(
 def branches = repo_data.text.readLines().collect { it.split()[1].replaceAll('refs/heads/', '')}
 jobslist = []
 def jobs = Jenkins.instance.getAllItems(AbstractItem.class)
-for(int i=0; i<jobs.size(); i++){
+for(int i=0; i<jobs.size(); i++) {
+    if (jobs.get(i).fullName.contains("stsitou")) {
     jobslist[i] = jobs.get(i).fullName
+}
 }
 
 job('MNTLAB-stsitou-main-build-job'){
     description('main')
     parameters {
-        choiceParam('JOBS', jobslist, 'Choose a job')
         choiceParam('BRANCH_NAME', branches, 'Choose a branch')
+
     }
     disabled(false)
     concurrentBuild(false)

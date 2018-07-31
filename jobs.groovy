@@ -20,9 +20,8 @@ job('MNTLAB-mznak-main-build-job'){
                 multiSelectDelimiter ','
                 projectName "MNTLAB-mznak-main-build-job"
             }
-        } 
-	parameterDefinitions {
-            'com.cwctravel.hudson.plugins.extended__choice__parameter.ExtendedChoiceParameterDefinition' {
+        }
+	   'com.cwctravel.hudson.plugins.extended__choice__parameter.ExtendedChoiceParameterDefinition' {
                 name 'BRANCH_NAME'
                 quoteValue 'false'
                 saveJSONParameterToFile 'false'
@@ -32,7 +31,7 @@ job('MNTLAB-mznak-main-build-job'){
                 multiSelectDelimiter ','
                 projectName "MNTLAB-mznak-main-build-job"
             }
-        }
+        
      }
   }
   

@@ -21,6 +21,7 @@ job('MNTLAB-stsitou-main-build-job'){
                         '    jobslist[i] = jobs.get(i).fullName\n' +
                         '}\n' +
                         'return jobslist')
+                sandbox(true)
             }
         }
         choiceParam('BRANCH_NAME', branches, 'Choose a branch')

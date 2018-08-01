@@ -48,7 +48,7 @@ job('MNTLAB-aandryieuski-main-build-job'){
                     remote {
                         github("MNT-Lab/d323dsl", "https")
                     }
-                    branch('*/$BRANCH_NAME')
+                    branch('$BRANCH_NAME')
                 }
             }
             wrappers {
@@ -58,7 +58,7 @@ job('MNTLAB-aandryieuski-main-build-job'){
                 }
             }
             steps {
-                shell('''sh script.sh > output.txt; tar -czvf $(echo $BRANCH_NAME | cut -d'/' -f2)_dsl_script.tar.gz jobs.groovy''')
+                shell('''sh script.sh > output.txt; tar -czvf "$BRANCH_NAME"_dsl_script.tar.gz jobs.groovy''')
             }
             publishers {
                 archiveArtifacts {

@@ -15,15 +15,22 @@ job('MNTLAB-aandryieuski-main-build-job'){
     disabled(false)
     concurrentBuild(false)
     steps {
-        downstreamParameterized {
-            trigger('$JOBS') {
-                block {
-                    buildStepFailure('FAILURE')
-                    failure('FAILURE')
-                    unstable('UNSTABLE')
-                }
-                parameters {
-                    currentBuildParameters()
+        conditionalSteps {
+            condition {
+                shell("""if [[ $JOBS ]]; then exit 0; else; echo "The JOBS have not been chosen!"; exit 1; fi""")
+            }
+            steps {
+                downstreamParameterized {
+                    trigger('$JOBS') {
+                        block {
+                            buildStepFailure('FAILURE')
+                            failure('FAILURE')
+                            unstable('UNSTABLE')
+                        }
+                        parameters {
+                            currentBuildParameters()
+                        }
+                    }
                 }
             }
         }

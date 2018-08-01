@@ -38,6 +38,7 @@ freeStyleJob('MNTLAB-knovichuk-main-build-job'){
                 fallbackScript('return ["ERROR"]')
             }
       }
+      choiceParam('BRANCH_NAME', ['knovichuk', 'master'], 'Choose branch')
   }
 
 }

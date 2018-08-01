@@ -23,7 +23,7 @@ job('MNTLAB-aandryieuski-main-build-job'){
                     unstable('UNSTABLE')
                 }
                 parameters {
-                    predefinedProp('BRANCH_NAME', '*/$BRANCH_NAME')
+                    currentBuildParameters()
                 }
             }
         }
@@ -48,7 +48,7 @@ job('MNTLAB-aandryieuski-main-build-job'){
                     remote {
                         github("MNT-Lab/d323dsl", "https")
                     }
-                    branch('*/${BRANCH_NAME}')
+                    branch('*/$BRANCH_NAME')
                 }
             }
             wrappers {

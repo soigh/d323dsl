@@ -9,7 +9,7 @@ job('MNTLAB-ysokal-main-build-job'){
 for(i in 1..4){
   list.add("MNTLAB-ysokal-child${i}-build-job")
     }
-return list\n''')
+return list''')
 
             }
         }
@@ -38,7 +38,9 @@ for(i in 1..4){
                 description('Select the branch')
                 choiceType('SINGLE_SELECT')
                 groovyScript {
-                    script('("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute().text.readLines().collect { it.split()[1].replaceAll(\'refs/heads/\', \'\') }.unique()')
+                    script('''("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute().text.readLines().collect {
+  it.split()[1].replaceAll(\'refs/heads/\', \'\')
+   }.unique()''')
 
                 }
             }

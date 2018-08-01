@@ -6,7 +6,7 @@ job('MNTLAB-aandryieuski-main-build-job'){
             filterable(false)
             choiceType('CHECKBOX')
             groovyScript {
-                script('return ["MNTLAB-aandryieuski-child1-build-job", "MNTLAB-aandryieuski-child2-build-job", "MNTLAB-aandryieuski-child3-build-job", "MNTLAB-aandryieuski-child4-build-job"]')
+                script('list = []; for(i in 1..4){ list.add("MNTLAB-aandryieuski-child${i}-build-job")} return list')
 
             }
         }

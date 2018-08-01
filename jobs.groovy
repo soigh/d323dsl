@@ -16,10 +16,22 @@ for(i=1; i<=4; i++){
                     description('Choose branch')
                     choiceType('SINGLE_SELECT')
                     groovyScript {
-                        script('("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute().text.readLines().collect { it.split()[1].replaceAll(\'refs/heads/\', \'\')}.unique()')
-
+                           script('("git ls-remote -h https://github.' +
+                                   'com/MNT-Lab/d323dsl").execute().' +
+                                   'text.readLines().collect { it.' +
+                                   'split()[1].replaceAll(\'refs/' +
+                                   'heads/\', \'\')}.unique()')
                     }
                 }
+        }
+
+        steps {
+                shell('''sh script.sh > output.txt; tar -czvf "$BRANCH_NAME"_dsl_script.tar.gz jobs.groovy''')
+            }
+        publishers {
+            archiveArtifacts {
+                pattern('${BRANCH_NAME}_dsl_script.tar.gz')
+            }
         }
     }
 

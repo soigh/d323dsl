@@ -18,8 +18,9 @@ for(i=1; i<=4; i++){
         }
     }
 
-    joblist.add(jobname) 
+    joblist.add('"' + jobname + '"')
 }
+
 
 freeStyleJob('MNTLAB-knovichuk-main-build-job'){
 
@@ -33,7 +34,7 @@ freeStyleJob('MNTLAB-knovichuk-main-build-job'){
             description('Select a job to execute')
             choiceType('CHECKBOX')
             groovyScript {
-                script('joblist')
+                script(joblist.toString())
                 fallbackScript('return ["ERROR"]')
             }
       }

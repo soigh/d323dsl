@@ -11,11 +11,13 @@ job('MNTLAB-stsitou-main-build-job'){
             filterable(false)
             choiceType('CHECKBOX')
             groovyScript {
-                script('jobslist = new ArrayList()\n' +
+                script('String[] jobslist\n' +
                         'def jobs = Jenkins.instance.getAllItems(AbstractItem.class)\n' +
+                        'def n\n' +
                         'for(int i=0; i<jobs.size(); i++) {\n' +
                         '    if (jobs.get(i).fullName.contains("stsitou")) {\n' +
-                        '        jobslist.add(jobs.get(i).fullName)\n' +
+                        '        jobslist[n] = jobs.get(i).fullName' +
+                        '        n++\n' +
                         '}\n' +
                         '}\n' +
                         'return jobslist')

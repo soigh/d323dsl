@@ -1,6 +1,3 @@
-def git_branches = ("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute()
-def just_branches = git_branches.text.readLines().collect { it.split()[1].replaceAll('refs/heads/', '')}
-
 freeStyleJob('MNTLAB-ypapkou-main-build-job'){
   parameters {
     description 'Main job'
@@ -36,7 +33,7 @@ for (i in 1..4) {
   freeStyleJob("MNTLAB-ypapkou-child${i}-build-job") {
     description "Child${i} job"
     parameters {
-      choiceParam('BRANCH_NAME', just_branches, 'Branch name')
+      choiceParam('BRANCH_NAME', ("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute().text.readLines().collect { it.split()[1].replaceAll('refs/heads/', '')}, 'Branch name')
     }
   	scm {
       git {

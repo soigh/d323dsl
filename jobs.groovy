@@ -1,4 +1,4 @@
-job('MNTLAB-apatapniou-main-build-job'){
+kjob('MNTLAB-apatapniou-main-build-job'){
     description 'main'
      parameters {
         activeChoiceParam('BUILD_TRIGGER') {
@@ -40,8 +40,7 @@ return list''')
                 groovyScript {
                     script('''("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute().text.readLines().collect {
   it.split()[1].replaceAll(\'refs/heads/\', \'\')
-   }.sort()''')
-
+   }.unique()''')
                 }
             }
 }

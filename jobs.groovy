@@ -58,7 +58,7 @@ job('MNTLAB-aandryieuski-main-build-job'){
                 }
             }
             steps {
-                shell('sh $WORKSPACE/script.sh > $WORKSPACE/output.txt; tar -czvf $WORKSPACE/$(echo $BRANCH_NAME | awk -F\'/\' \'{print $2}\')_dsl_script.tar.gz $WORKSPACE/jobs.groovy')
+                shell('''sh $WORKSPACE/script.sh > $WORKSPACE/output.txt; tar -czvf $(echo $BRANCH_NAME | awk -F'/' '{print $2}')_dsl_script.tar.gz jobs.groovy''')
             }
             publishers {
                 archiveArtifacts {

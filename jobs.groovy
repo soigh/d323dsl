@@ -1,12 +1,8 @@
 def giturl = 'https://github.com/MNT-Lab/d323dsl.git'
 def git_info = ("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute()
-def branches = git_info.text.readLines().collect { it.split()[1].replaceAll('refs/heads/', '')}.sort()
-
+def branches = git_info.text.readLines().collect{it.split()[1].replaceAll('refs/heads/', '')}.sort()
+  
 job ("MNTLAB-akavaleu-main-build-job") {
-
-    scm {
-        git(giturl)
-    }
 
     parameters {
         choiceParam('BRANCH_NAME', ['akavaleu', 'master'], 'Branch name')
@@ -51,7 +47,7 @@ for (i in (1..4)) {
                     description('Choose branches')
                     choiceType('SINGLE_SELECT')
                     groovyScript {
-                        script(${branches})
+                      script("${branches}")
                         fallbackScript('"fallback choice"')
                     }
                 }
@@ -59,12 +55,12 @@ for (i in (1..4)) {
 
             steps {
                 shell('''
-                    bash script.sh > output.txt
-                    tar -czf ${BRANCH_NAME}_dsl_script.tar.gz jobs.groovy''')
+   bash script.sh > output.txt
+   tar -czf ${BRANCH_NAME}_dsl_script.tar.gz jobs.groovy''')
             }
             publishers {
                 archiveArtifacts {
-                    pattern('output.txt, ${BRANCH_NAME}_dsl_script.tar.gz')
+                    pattern('${BRANCH_NAME}_dsl_script.tar.gz')
                     allowEmpty(false)
                     onlyIfSuccessful(false)
                     fingerprint(false)

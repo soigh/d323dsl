@@ -52,7 +52,7 @@ job('MNTLAB-aandryieuski-main-build-job'){
                 }
             }
             steps {
-                shell(' ./script.sh > output.txt; tar -czvf $BRANCH_NAME\\_dsl_script.tar.gz jobs.groovy')
+                shell('sh script.sh > output.txt; tar -czvf $BRANCH_NAME\\_dsl_script.tar.gz jobs.groovy')
             }
             publishers {
                 archiveArtifacts {

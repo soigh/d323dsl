@@ -50,7 +50,7 @@ fi''')
                     filterable(false)
                     choiceType('SINGLE_SELECT')
                     groovyScript {
-                        script('("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute().text.readLines().collect { it.split()[1].replaceAll(\'refs/heads/\', \'\')}.unique()')
+                        script('("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute().text.readLines().collect { it.split()[1].replaceAll(\'refs/heads/\', \'\')}')
 
                     }
                 }

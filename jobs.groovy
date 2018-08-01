@@ -32,8 +32,16 @@ freeStyleJob('MNTLAB-ypapkou-main-build-job'){
 for (i in 1..4) {
   freeStyleJob("MNTLAB-ypapkou-child${i}-build-job") {
     description "Child${i} job"
-    parameters {
-      choiceParam('BRANCH_NAME', ("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute().text.readLines().collect { it.split()[1].replaceAll('refs/heads/', '')}, 'Branch name')
+    parameters {      
+      activeChoiceParam('BRANCH_NAME') {
+        description('Allows user choose branches')
+        filterable(false)
+        choiceType('SINGLE_SELECT')
+        groovyScript {
+          script('("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute().text.readLines().collect { it.split()[1].replaceAll(\'refs/heads/\', \'\')}')
+     	  fallbackScript('"fallback choice"')
+        }    
+      }
     }
   	scm {
       git {

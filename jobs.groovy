@@ -24,6 +24,9 @@ return list''')
                     failure('FAILURE')
                     unstable('UNSTABLE')
                 }
+               parameters {
+                    currentBuildParameters()
+}
          
     }
 }
@@ -33,7 +36,8 @@ return list''')
 
   for(i in 1..4) {
         freeStyleJob("MNTLAB-apatapniou-child${i}-build-job") {
-             scm {
+             
+        scm {
             github('MNT-Lab/d323dsl', '$BRANCH_NAME')
         }
         parameters {
@@ -47,7 +51,6 @@ return list''')
                 }
             }
 }
-          
        
     steps{
       shell('''bash script.sh > output.txt

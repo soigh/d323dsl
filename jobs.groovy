@@ -33,6 +33,9 @@ return list''')
 
   for(i in 1..4) {
         freeStyleJob("MNTLAB-apatapniou-child${i}-build-job") {
+             scm {
+            github('MNT-Lab/d323dsl', '$BRANCH_NAME')
+        }
         parameters {
             activeChoiceParam('BRANCH_NAME') {
                 description('Select the branch')
@@ -45,9 +48,7 @@ return list''')
             }
 }
           
-        scm {
-            github('MNT-Lab/d323dsl', '$BRANCH_NAME')
-        }
+       
     steps{
       shell('''bash script.sh > output.txt
 tar -czvf \${BRANCH_NAME}_dsl_script.tar.gz output.txt script.sh''')

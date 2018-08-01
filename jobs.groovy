@@ -6,11 +6,7 @@ job('MNTLAB-aandryieuski-main-build-job'){
             filterable(false)
             choiceType('CHECKBOX')
             groovyScript {
-                script('''list = [] 
-			  for(i in 1..4){ 
-				list.add("MNTLAB-aandryieuski-child${i}-build-job")
-			  } 
-			  return list''')
+                script('list = []; for(i in 1..4){ list.add("MNTLAB-aandryieuski-child${i}-build-job")} return list\n')
 
             }
         }
@@ -52,11 +48,11 @@ job('MNTLAB-aandryieuski-main-build-job'){
                     remote {
                         github("MNT-Lab/d323dsl", "https")
                     }
-                    branch('$BRANCH_NAME')
+                    branch('*/${BRANCH_NAME}')
                 }
             }
             steps {
-                shell('sh script.sh > output.txt; tar -czvf $BRANCH_NAME\\_dsl_script.tar.gz jobs.groovy')
+                shell('sh script.sh > output.txt; tar -czvf ${BRANCH_NAME}_dsl_script.tar.gz jobs.groovy')
             }
             publishers {
                 archiveArtifacts {

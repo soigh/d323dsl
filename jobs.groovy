@@ -1,15 +1,10 @@
 job("MNTLAB-mpiatliou-main-build-job") {
     parameters {
-        choiceParam('BRANCH_NAME', ['master', 'mpiatliou'], 'branch choice')
+        choiceParam('BRANCH_NAME', ['master', 'mpiatliou'], '')
         activeChoiceParam('JOB_TO_BUILD') {
             choiceType('CHECKBOX')
-            description('options')
             groovyScript {
-                script('''return [
-"MNTLAB-mpiatliou-child1-build-job",
-"MNTLAB-mpiatliou-child2-build-job",
-"MNTLAB-mpiatliou-child3-build-job",
-"MNTLAB-mpiatliou-child4-build-job"]''')
+                script('''return ["MNTLAB-mpiatliou-child1-build-job", "MNTLAB-mpiatliou-child2-build-job", "MNTLAB-mpiatliou-child3-build-job", "MNTLAB-mpiatliou-child4-build-job"]''')
                 fallbackScript('"fallback choice"')
             }
         }
@@ -44,8 +39,7 @@ for(i in 1..4) {
             preBuildCleanup()
         }
         parameters {
-            choiceParam('BRANCH_NAME', ("git ls-remote -h https://github.com/MNT-Lab/d323dsl").
-                    execute().text.readLines().collect { it.split()[1].replaceAll('refs/heads/', '')}.sort(), '')
+            choiceParam('BRANCH_NAME', ("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute().text.readLines().collect { it.split()[1].replaceAll('refs/heads/', '')}.sort(), '')
         }
         scm {
             git {

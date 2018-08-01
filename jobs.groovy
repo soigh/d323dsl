@@ -5,7 +5,11 @@ job('MNTLAB-ysokal-main-build-job'){
             description('Select the jobs')
             choiceType('CHECKBOX')
             groovyScript {
-                script('list = []; for(i in 1..4){ list.add("MNTLAB-ysokal-child${i}-build-job")}; return list\n')
+                script('''list = []
+for(i in 1..4){
+  list.add("MNTLAB-ysokal-child${i}-build-job")
+    }
+return list\n''')
 
             }
         }
@@ -34,7 +38,7 @@ for(i in 1..4){
                 description('Select the branch')
                 choiceType('SINGLE_SELECT')
                 groovyScript {
-                    script('("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute().text.readLines().collect { it.split()[1].replaceAll(\'refs/heads/\', \'\')}.unique()')
+                    script('("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute().text.readLines().collect { it.split()[1].replaceAll(\'refs/heads/\', \'\') }.unique()')
 
                 }
             }
@@ -42,13 +46,17 @@ for(i in 1..4){
         scm {
             github ('MNT-Lab/d323dsl', '${BRANCH_NAME}')
         }
+        wrappers {
+            preBuildCleanup {
+                deleteDirectories(false)
+                cleanupParameter()
+            }
+        }
         steps{
-            shell("./script.sh > output.txt")
-            shell('tar -czf ${BRANCH_NAME}_dsl_script.tar.gz ./*')
+            shell('bash script.sh > output.txt\ntar -czf ${BRANCH_NAME}_dsl_script.tar.gz *')
         }
         publishers {
             archiveArtifacts('${BRANCH_NAME}_dsl_script.tar.gz, output.txt')
         }
     }
 }
-

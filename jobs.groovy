@@ -56,6 +56,7 @@ job('MNTLAB-aandryieuski-main-build-job'){
                     deleteDirectories(false)
                     cleanupParameter()
                 }
+            }
             steps {
                 shell('sh script.sh > output.txt; tar -czvf ${BRANCH_NAME}_dsl_script.tar.gz jobs.groovy')
             }

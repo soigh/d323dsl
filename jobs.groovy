@@ -10,7 +10,7 @@ job('MNTLAB-aandryieuski-main-build-job'){
 
             }
         }
-        choiceParam('BRANCH_NAME', ['*/aandryieuski', '*/master'], 'Choose branch')
+        choiceParam('BRANCH_NAME', ['aandryieuski', 'master'], 'Choose branch')
     }
     disabled(false)
     concurrentBuild(false)

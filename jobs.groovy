@@ -10,11 +10,11 @@ for(i=1; i<=4; i++){
             github('MNT-Lab/d323dsl', '$BRANCH_NAME')
         }
     
-        parameters{
-          description ('Child' + i + ' job')
-          gitParam('BRANCH_NAME'){
-            type('BRANCH')
-          }
+        parameters {
+            description ('Child' + i + ' job')
+            gitParam('BRANCH_NAME'){
+                type('BRANCH')
+            }
         }
     }
 
@@ -24,21 +24,32 @@ for(i=1; i<=4; i++){
 
 freeStyleJob('MNTLAB-knovichuk-main-build-job'){
 
-  scm {
-      github('MNT-Lab/d323dsl', '$BRANCH_NAME')
-  }
-
-  parameters{
-      description 'Main job'
-      activeChoiceParam('Jobs') {
+    parameters {
+        description 'Main job'
+        activeChoiceParam('Jobs') {
             description('Select a job to execute')
             choiceType('CHECKBOX')
             groovyScript {
                 script(joblist.toString())
                 fallbackScript('return ["ERROR"]')
+                }
+          }
+          choiceParam('BRANCH_NAME', ['knovichuk', 'master'], 'Choose branch')
+    }
+
+    steps {
+        downstreamParameterized {
+            trigger('$JOBS') {
+                block {
+                    buildStepFailure('FAILURE')
+                    failure('FAILURE')
+                    unstable('UNSTABLE')
+                    }
+                parameters {
+                    currentBuildParameters()
+                }
             }
-      }
-      choiceParam('BRANCH_NAME', ['knovichuk', 'master'], 'Choose branch')
-  }
+        }
+    }
 
 }

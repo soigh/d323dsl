@@ -8,7 +8,8 @@ job('MNTLAB-stsitou-main-build-job'){
     description('main')
     parameters {
         activeChoiceParam('JOBS') {
-            description('Select jobs to be executed with parameters')
+            description('Choose jobs to run')
+            filterable(false)
             choiceType('CHECKBOX')
             groovyScript {
                 script('jobslist = []\n' +

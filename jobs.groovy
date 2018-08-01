@@ -47,11 +47,15 @@ for (i in (1..4)) {
                 }
             }
                  
-            scm {
-                git(giturl)
-              branch("${BRANCH_NAME}")
-            }
-			
+          
+          scm {
+      git {
+        remote {
+          url(giturl)
+        }
+        branch('$BRANCH_NAME')
+      }
+    }         		
             steps {
                 shell('''
    bash script.sh > output.txt
@@ -59,7 +63,7 @@ for (i in (1..4)) {
             }
             publishers {
                 archiveArtifacts {
-                    pattern("${BRANCH_NAME}_dsl_script.tar.gz")
+                    pattern('${BRANCH_NAME}_dsl_script.tar.gz')
                     allowEmpty(false)
                     onlyIfSuccessful(false)
                     fingerprint(false)

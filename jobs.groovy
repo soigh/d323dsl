@@ -44,11 +44,7 @@ job('MNTLAB-stsitou-main-build-job'){
         job("MNTLAB-stsitou-child${i}-build-job") {
             description("Child${i}")
             parameters {
-                activeChoiceParam('BRANCH_NAME') {
-                    description('Choose a branch')
-                    filterable(false)
-                    choiceType('SINGLE_SELECT')
-                }
+                choiceParam('BRANCH_NAME', branches, 'Choose a branch')
             }
             scm {
                 git {

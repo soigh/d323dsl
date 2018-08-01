@@ -1,4 +1,4 @@
-kjob('MNTLAB-apatapniou-main-build-job'){
+job('MNTLAB-apatapniou-main-build-job'){
     description 'main'
      parameters {
         activeChoiceParam('BUILD_TRIGGER') {

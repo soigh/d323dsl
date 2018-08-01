@@ -23,7 +23,7 @@ job('MNTLAB-aandryieuski-main-build-job'){
                     unstable('UNSTABLE')
                 }
                 parameters {
-                    currentBuildParameters()
+                    predefinedProp('BRANCH_NAME', '*/$BRANCH_NAME')
                 }
             }
         }

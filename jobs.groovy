@@ -3,7 +3,6 @@ import hudson.model.*
 def repo_data = ("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute()
 def branches = repo_data.text.readLines().collect { it.split()[1].replaceAll('refs/heads/', '')}
 
-
 job('MNTLAB-stsitou-main-build-job'){
     description('main')
     parameters {
@@ -12,7 +11,14 @@ job('MNTLAB-stsitou-main-build-job'){
             filterable(false)
             choiceType('CHECKBOX')
             groovyScript {
-                script('return ["1","2"]')
+                script('jobslist = new ArrayList()\n' +
+                        'def jobs = Jenkins.instance.getAllItems(AbstractItem.class)\n' +
+                        'for(int i=0; i<jobs.size(); i++) {\n' +
+                        '    if (jobs.get(i).fullName.contains("stsitou")) {\n' +
+                        '        jobslist.add(jobs.get(i).fullName)\n' +
+                        '}\n' +
+                        '}\n' +
+                        'return jobslist')
             }
         }
         choiceParam('BRANCH_NAME', branches, 'Choose a branch')

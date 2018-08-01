@@ -7,14 +7,13 @@ job ("MNTLAB-akavaleu-main-build-job") {
     parameters {
         choiceParam('BRANCH_NAME', ['akavaleu', 'master'], 'Branch name')
         activeChoiceParam('Next_job') {
-            description('Choose branches')
+            description('Choose job')
             choiceType('CHECKBOX')
             groovyScript {
                 script('''return ["MNTLAB-akavaleu-child1-build-job",
                         "MNTLAB-akavaleu-child2-build-job",
                         "MNTLAB-akavaleu-child3-build-job",
                         "MNTLAB-akavaleu-child4-build-job"]''')
-                fallbackScript('return ["Script error!"]')
             }
         }
     }
@@ -38,21 +37,21 @@ job ("MNTLAB-akavaleu-main-build-job") {
 for (i in (1..4)) {
         job("MNTLAB-akavaleu-child${i}-build-job") {
 
-            scm {
-                git(giturl)
-            }
-
             parameters {
                 activeChoiceParam('BRANCH_NAME') {
-                    description('Choose branches')
+                    description('Choose branch')
                     choiceType('SINGLE_SELECT')
                     groovyScript {
                       script("${branches}")
-                        fallbackScript('"fallback choice"')
                     }
                 }
             }
-
+                 
+            scm {
+                git(giturl)
+              branch("${BRANCH_NAME}")
+            }
+			
             steps {
                 shell('''
    bash script.sh > output.txt
@@ -60,7 +59,7 @@ for (i in (1..4)) {
             }
             publishers {
                 archiveArtifacts {
-                    pattern('${BRANCH_NAME}_dsl_script.tar.gz')
+                    pattern("${BRANCH_NAME}_dsl_script.tar.gz")
                     allowEmpty(false)
                     onlyIfSuccessful(false)
                     fingerprint(false)

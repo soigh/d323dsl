@@ -17,7 +17,7 @@ job('MNTLAB-aandryieuski-main-build-job'){
     steps {
         conditionalSteps {
             condition {
-                shell("""if [[ $JOBS ]]; then exit 0; else; echo "The JOBS have not been chosen!"; exit 1; fi""")
+                shell('if [[ $JOBS ]]; then exit 0; else; echo "The JOBS have not been chosen!"; exit 1; fi')
             }
             steps {
                 downstreamParameterized {

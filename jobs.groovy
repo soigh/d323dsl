@@ -12,9 +12,14 @@ for(i=1; i<=4; i++){
     
         parameters {
             description ('Child' + i + ' job')
-            gitParam('BRANCH_NAME'){
-                type('BRANCH')
-            }
+            activeChoiceParam('BRANCH_NAME') {
+                    description('Choose branch')
+                    choiceType('SINGLE_SELECT')
+                    groovyScript {
+                        script('("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute().text.readLines().collect { it.split()[1].replaceAll(\'refs/heads/\', \'\')}.unique()')
+
+                    }
+                }
         }
     }
 
@@ -22,7 +27,7 @@ for(i=1; i<=4; i++){
 }
 
 
-freeStyleJob('MNTLAB-knovichuk-main-build-job'){
+job('MNTLAB-knovichuk-main-build-job'){
 
     parameters {
         description 'Main job'

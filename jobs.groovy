@@ -13,7 +13,7 @@ return list''')
 
             }
         }
-        choiceParam('BRANCH_NAME', ['apatapniou', 'master'], 'Choose branch from git "d323dsl".')
+        choiceParam('BRANCH_NAME', ['apatapniou', 'master'], '')
 
     }
        steps {
@@ -47,7 +47,7 @@ return list''')
                 groovyScript {
                     script('''("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute().text.readLines().collect {
   it.split()[1].replaceAll(\'refs/heads/\', \'\')
-   }.unique()''')
+   }.sort()''')
                 }
             }
 }

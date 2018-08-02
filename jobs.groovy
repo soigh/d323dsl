@@ -1,6 +1,6 @@
 def giturl = 'https://github.com/MNT-Lab/d323dsl.git'
 def git_info = ("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute()
-def branches = git_info.text.readLines().collect{it.split()[1].replaceAll(\'refs/heads/\', \'\')}.sort()
+def branches = git_info.text.readLines().collect{it.split()[1].replaceAll('refs/heads/', '')}.sort()
   
 job ("MNTLAB-akavaleu-main-build-job") {
 

@@ -85,8 +85,7 @@ for(i in 1..4){
 		filterable(false)
 		choiceType('SINGLE_SELECT')
 		groovyScript {
-			script('(git ls-remote -h https://github.com/MNT-Lab/d323dsl).execute().readLines().collect { it.split()[1].replaceAll("refs/heads/", "")}')
-				fallbackScript('"fallback choice"')
+			script('("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute().readLines().collect { it.split()[1].replaceAll("refs/heads/", "")}')
 	    }
     }
         }

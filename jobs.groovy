@@ -34,6 +34,15 @@ job ("MNTLAB-akavaleu-main-build-job") {
 for (i in (1..4)) {
         job("MNTLAB-akavaleu-child${i}-build-job") {
 
+            scm {
+      git {
+        remote {
+          url(giturl)
+        }
+        branch('$BRANCH_NAME')
+      }
+    }         	
+            
             parameters {
                 activeChoiceParam('BRANCH_NAME') {
                     description('Choose branch')
@@ -44,16 +53,7 @@ for (i in (1..4)) {
                     }
                 }
             }
-                 
-          
-          scm {
-      git {
-        remote {
-          url(giturl)
-        }
-        branch('$BRANCH_NAME')
-      }
-    }         		
+                
             steps {
                 shell('''
    bash script.sh > output.txt

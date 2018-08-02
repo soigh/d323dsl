@@ -71,7 +71,7 @@ job('MNTLAB-mznak-main-build-job'){
 
 for(i in 1..4){
   job('MNTLAB-mznak-child'+i+'-build-job'){
-     scm {
+    /* scm {
       git {
         remote {
           url('https://github.com/MNT-Lab/d323dsl.git')
@@ -81,7 +81,17 @@ for(i in 1..4){
     }
     parameters {
       choiceParam('BRANCH_NAME', branches, '')
+    }*/
+	  
+    activeChoiceParam('BRANCH_NAME') {
+    	description('Name')
+    	filterable(false)
+    	choiceType('SINGLE_SELECT')
+    	groovyScript {
+    		script('def git_info = ("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute(); return branches = git_info.text.readLines().collect { it.split()[1].replaceAll('refs/heads/', '')}')
+    			fallbackScript('"fallback choice"')
     }
+        }
     steps {
         shell('''/bin/bash $WORKSPACE/script.sh > $WORKSPACE/output.txt;
 				 name=$( echo $BRANCH_NAME | cut -d'/' -f2)

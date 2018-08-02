@@ -1,5 +1,5 @@
 def giturl = 'https://github.com/MNT-Lab/d323dsl.git'
-
+def git_info = ("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute()
 job ("MNTLAB-akavaleu-main-build-job") {
 
     parameters {
@@ -40,9 +40,7 @@ for (i in (1..4)) {
                     description('Choose branch')
                     choiceType('SINGLE_SELECT')
                     groovyScript {
-                      script('''("git ls-remote -h 
-                      https://github.com/MNT-Lab/d323dsl").execute().text.readLines().collect
-                      {it.split()[1].replaceAll('refs/heads/', '')}.sort()''')
+                      script('''git_info.text.readLines().collect { it.split()[1].replaceAll('refs/heads/', '')}.sort()''')
                     }
                 }
             }

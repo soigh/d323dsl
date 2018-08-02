@@ -42,7 +42,7 @@ for (i in (1..4)) {
                     description('Choose branch')
                     choiceType('SINGLE_SELECT')
                     groovyScript {
-                      script("${branches}")
+                      script('${branches}')
                     }
                 }
             }

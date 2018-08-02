@@ -1,6 +1,3 @@
-def git_info = ("git ls-remote -h https://github.com/MNT-Lab/d323dsl").execute()
-def branches = git_info.text.readLines().collect { it.split()[1].replaceAll('refs/heads/', '')}.unique()
-
 job('MNTLAB-mznak-main-build-job'){
    scm {
         github('MNT-Lab/d323dsl', '$BRANCH_NAME')

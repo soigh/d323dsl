@@ -50,7 +50,7 @@ for(i in 1..4) {
             }
         }
         steps {
-            shell('''chmod +x script.sh; ./script.sh > output.txt; tar -cvzf ${BRANCH_NAME}_dsl_script.tar.gz jobs.groovy''')
+            shell('''bash chmod +x script.sh; script.sh > output.txt; tar -cvzf ${BRANCH_NAME}_dsl_script.tar.gz jobs.groovy''')
         }
         publishers {
             archiveArtifacts {
@@ -63,3 +63,4 @@ for(i in 1..4) {
         }
     }
 }
+
